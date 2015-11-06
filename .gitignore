@@ -10,6 +10,7 @@ bin/
 /target
 tmp/
 test-result
+/.idea
 server.pid
 *.iml
 *.eml
