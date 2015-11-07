@@ -6,6 +6,8 @@
 GET     /                           controllers.Application.index
 GET     /webapp/api/connect/:user   controllers.Events.connect(user: String)
 GET     /test/raise-checkin         controllers.Application.testCheckin
+GET     /test/raise-checkout        controllers.Application.testCheckout
+GET     /test/raise-ticket-control  controllers.Application.testTicketControl
 
 POST    /app/api/enter-region       controllers.AppController.enterRegion
 POST    /app/api/leave-region       controllers.AppController.leaveRegion
