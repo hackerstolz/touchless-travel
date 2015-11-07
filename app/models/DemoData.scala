@@ -7,13 +7,15 @@ import services.LocationService
   */
 object DemoData {
 
+  var demoDataPopulated: Boolean = false
+
   def populate = {
 
     val train1 = Train("1", "S2")
 
     val beacon1 = "sdf"
     val beacon2 = "sf"
-    val beacon3 = "sdf"
+    val beacon3 = "sdfdasd"
 
     Trains.add(train1)
 

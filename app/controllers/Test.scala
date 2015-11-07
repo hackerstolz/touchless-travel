@@ -54,11 +54,11 @@ class Test extends Controller with EventTrigger {
     Ok(testTicketControl.toJSON)
   }
 
-  var demoDataPopulated: Boolean = false
+
   def populateDemoData = Action {
-     if(demoDataPopulated == false) {
+     if(DemoData.demoDataPopulated == false) {
        DemoData.populate
-       demoDataPopulated = true
+       DemoData.demoDataPopulated = true
        Ok("Successfully populated demo data")
      } else {
       Ok("Demo data already populated")
