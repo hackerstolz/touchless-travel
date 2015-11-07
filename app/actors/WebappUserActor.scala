@@ -1,7 +1,6 @@
 package actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
-import play.api.Logger
 import play.api.libs.iteratee.Concurrent
 import play.api.libs.iteratee.Concurrent.Channel
 import play.api.libs.json.{Json, JsValue}
@@ -35,7 +34,7 @@ class WebappUserActorManager extends Actor with ActorLogging {
     val props = Props(new WebappUserActor(user))
     val connectedUser = context.actorOf(props, name = user)
     context.system.eventStream.subscribe(connectedUser, classOf[Event])
-    Logger.info("Created UserActor for user: " + user)
+    log.info("Created UserActor for user: " + user)
     connectedUser
   }
 }
@@ -46,10 +45,10 @@ class WebappUserActor(val user: String) extends Actor with ActorLogging {
   def receive = {
     case Connect => connect
     case e: Event => {
-      Logger.info("called notifiy")
+      log.info("called notifiy")
       getChannelOrStop { c =>
         c.push(Json.toJson(e.data))
-        Logger.info("Delivered message (" + user + "):" + e.data)
+        log.info("Delivered message (" + user + "):" + e.data)
       }
     }
     case unknwon => log.info(
@@ -59,7 +58,7 @@ class WebappUserActor(val user: String) extends Actor with ActorLogging {
   def connect = {
     val enumerator = Concurrent.unicast[JsValue](
       onStart = (c) => {
-        Logger.info("Connected event source")
+        log.info("Connected event source")
         notificationChannel = Some(c)
       },
       onComplete = stop,

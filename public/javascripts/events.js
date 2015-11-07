@@ -30,6 +30,14 @@ var source = new EventSource('/webapp/api/connect/' + user);
 //  }
 //}, false);
 
+source.onopen =  function(e) {
+  console.log('Connection to backend established');
+  var node = document.createElement("LI");
+    var textnode = document.createTextNode('Connection to backend established');
+    node.appendChild(textnode);
+    document.getElementById("events").appendChild(node);
+};
+
 
 source.onmessage = function(e) {
   console.log(e.data);

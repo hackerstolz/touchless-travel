@@ -30,9 +30,10 @@ class Events extends Controller {
     Await.result((userActorManager ? ActorFor(user)).mapTo[ActorRef], 2 seconds)
 
   private def startEventStream(e: Enumerator[JsValue]): Result =
-    Ok.stream(e &> EventSource()).as("text/event-stream").withHeaders(
-    HeaderNames.CACHE_CONTROL -> "no-cache",
-    HeaderNames.CONNECTION -> "keep-alive")
+    Ok.feed(e &> EventSource()).as("text/event-stream")
+      //.withHeaders(
+    //HeaderNames.CACHE_CONTROL -> "no-cache")
+    //HeaderNames.CONNECTION -> "keep-alive")
 
   //      withHeaders(
   //      HeaderNames.CONTENT_TYPE -> MimeTypes.EVENT_STREAM,
