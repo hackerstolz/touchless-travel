@@ -27,7 +27,7 @@ class AppController extends Controller with EventTrigger {
         BadRequest(Json.obj("status" ->"KO", "message" -> JsError.toFlatJson(errors)))
       },
       event => {
-        EnterLeaveEvents.enterLeaveEvents += event
+        EnterLeaveEvents.enterLeaveEvents += event.copy(etype = Some("ENTER"))
         Logger.debug(EnterLeaveEvents.enterLeaveEvents.toString())
         Ok(Json.obj("status" ->"OK", "message" -> ("Event "+event.toString+" saved.") ))
       }
