@@ -1,6 +1,12 @@
 package actors
 
-import
+import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import play.api.Logger
+import play.api.libs.iteratee.Concurrent
+import play.api.libs.iteratee.Concurrent.Channel
+import play.api.libs.json.JsValue
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
   * Created by Norman on 06.11.15.
@@ -10,7 +16,7 @@ import
 case class Connect()
 case class ActorFor(user: String)
 
-class WebappUserActorManager extends Actor {
+class WebappUserActorManager extends Actor with ActorLogging {
 
   override def preStart() {
     log.info("User (connection) ActorManager started")
@@ -18,43 +24,43 @@ class WebappUserActorManager extends Actor {
 
   def receive = {
     case ActorFor(user) =>
-      sender ! context.children.find(_.path.name == idAsString(user)).
+      sender ! context.children.find(_.path.name == user).
         getOrElse(actorFor(user))
   }
 
-  def actorFor(user: models.User): ActorRef = {
-    val props = Props(new UserActor(user.id.get))
-    val connectedUser = context.actorOf(props, name = idAsString(user))
-    log.info("Created UserActor for userID: " + idAsString(user))
+  def actorFor(user: String): ActorRef = {
+    val props = Props(new WebappUserActor(user))
+    val connectedUser = context.actorOf(props, name = user)
+    Logger.info("Created UserActor for user: " + user)
     connectedUser
   }
 }
 
-class WebappUserActor(userId: Long) extends Actor with ActorLogging {
+class WebappUserActor(user: String) extends Actor with ActorLogging {
   var notificationChannel: Option[Channel[JsValue]] = None
 
   def receive = {
     case Connect => connect
-    case n: Notification => {
-      log.info("called notifiy")
-      getChannelOrStop { c =>
-        c.push(Json.toJson(n))
-        log.info("Delivered message: " + n.id)
-      }
-    }
-    case unknwon => log.info(
-      "Received unprocessable message: " + unknwon.getClass.getName)
+    //    case n: Notification => {
+    //      log.info("called notifiy")
+    //      getChannelOrStop { c =>
+    //        c.push(Json.toJson(n))
+    //        log.info("Delivered message: " + n.id)
+    //      }
+    //    }
+    //    case unknwon => log.info(
+    //      "Received unprocessable message: " + unknwon.getClass.getName)
   }
 
   def connect = {
     val enumerator = Concurrent.unicast[JsValue](
       onStart = (c) => {
-        log.info("Connected event source")
+        Logger.info("Connected event source")
         notificationChannel = Some(c)
       },
       onComplete = stop,
       onError = (str, in) => {
-        Logger.info(str)
+        log.info(str)
         stop
       }).onDoneEnumerating(() => stop)
     sender ! enumerator

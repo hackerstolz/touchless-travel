@@ -1,6 +1,7 @@
 
 console.log('Try connecting to event source...');
-var source = new EventSource('/webapp/api/connect');
+var user = 'asdasd';
+var source = new EventSource('/webapp/api/connect/' + user);
 
 source.addEventListener('message', function(e) {
   console.log(e.data);
