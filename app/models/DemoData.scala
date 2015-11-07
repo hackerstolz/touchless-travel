@@ -13,16 +13,10 @@ object DemoData {
 
     val train1 = Train("1", "S2")
 
-    val beacon1 = "sdf"
-    val beacon2 = "sf"
-    val beacon3 = "sdfdasd"
+    val beacon1 = "63333"
 
     Trains.add(train1)
-
     Trains.addBeacon(beacon1, train1.id)
-    Trains.addBeacon(beacon2, train1.id)
-    Trains.addBeacon(beacon3, train1.id)
-
 
     val user1 = User("1", "Sophie")
 
