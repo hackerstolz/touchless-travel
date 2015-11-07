@@ -4,10 +4,12 @@
 
 # Home page
 GET     /                           controllers.Application.index
+
+GET     /test/raise-checkin         controllers.Test.testCheckin
+GET     /test/raise-checkout        controllers.Test.testCheckout
+GET     /test/raise-ticket-control  controllers.Test.testTicketControl
+
 GET     /webapp/api/connect/:user   controllers.Events.connect(user: String)
-GET     /test/raise-checkin         controllers.Application.testCheckin
-GET     /test/raise-checkout        controllers.Application.testCheckout
-GET     /test/raise-ticket-control  controllers.Application.testTicketControl
 
 POST    /app/api/enter-region       controllers.AppController.enterRegion
 POST    /app/api/leave-region       controllers.AppController.leaveRegion

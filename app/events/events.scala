@@ -1,6 +1,7 @@
 package events
 
 
+import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.libs.json.JsValue
 
@@ -21,7 +22,7 @@ case class CheckinEvent(
                          locationName: String,
                          lat: String,
                          lng: String,
-                         timestamp: String
+                         timestamp: DateTime = new DateTime
                        ) extends Event {
 
   implicit val jsonWrites = Json.writes[CheckinEvent]
@@ -38,7 +39,7 @@ case class CheckoutEvent(
                           locationName: String,
                           lat: String,
                           lng: String,
-                          timestamp: String
+                          timestamp: DateTime = new DateTime
                         ) extends Event {
 
   implicit val jsonWrites = Json.writes[CheckoutEvent]
@@ -56,7 +57,7 @@ case class TicketControlEvent(
                                controlType: String,
                                lat: String,
                                lng: String,
-                               timestamp: String
+                               timestamp: DateTime = new DateTime
                              ) extends Event {
 
   implicit val jsonWrites = Json.writes[TicketControlEvent]
