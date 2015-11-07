@@ -8,6 +8,7 @@ GET     /                           controllers.Application.index
 GET     /test/raise-checkin         controllers.Test.testCheckin
 GET     /test/raise-checkout        controllers.Test.testCheckout
 GET     /test/raise-ticket-control  controllers.Test.testTicketControl
+GET     /test/populate-demo-data    controllers.Test.populateDemoData
 
 GET     /webapp/api/connect/:user   controllers.Events.connect(user: String)
 

@@ -2,6 +2,7 @@ package controllers
 
 
 import events.{TicketControlEvent, CheckoutEvent, CheckinEvent}
+import models.DemoData
 import play.api.mvc.{Action, Controller}
 
 /**
@@ -21,7 +22,7 @@ class Test extends Controller with EventTrigger {
       lng = "34.47637882")
 
     raiseEvent(testCheckin)
-    Ok
+    Ok(testCheckin.toJSON)
   }
 
   def testCheckout = Action {
@@ -35,7 +36,7 @@ class Test extends Controller with EventTrigger {
       lng = "34.47637882")
 
     raiseEvent(testCheckout)
-    Ok
+    Ok(testCheckout.toJSON)
   }
 
   def testTicketControl = Action {
@@ -50,7 +51,18 @@ class Test extends Controller with EventTrigger {
       lng = "34.47637882")
 
     raiseEvent(testTicketControl)
-    Ok
+    Ok(testTicketControl.toJSON)
+  }
+
+  var demoDataPopulated: Boolean = false
+  def populateDemoData = Action {
+     if(demoDataPopulated == false) {
+       DemoData.populate
+       demoDataPopulated = true
+       Ok("Successfully populated demo data")
+     } else {
+      Ok("Demo data already populated")
+     }
   }
 
 }
