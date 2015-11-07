@@ -5,6 +5,7 @@ import actors.{ActorFor, Connect}
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
+import play.api.http.HeaderNames
 import play.api.libs.EventSource
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.JsValue
@@ -29,7 +30,9 @@ class Events extends Controller {
     Await.result((userActorManager ? ActorFor(user)).mapTo[ActorRef], 2 seconds)
 
   private def startEventStream(e: Enumerator[JsValue]): Result =
-    Ok.stream(e &> EventSource()).as("text/event-stream")
+    Ok.stream(e &> EventSource()).as("text/event-stream").withHeaders(
+    HeaderNames.CACHE_CONTROL -> "no-cache",
+    HeaderNames.CONNECTION -> "keep-alive")
 
   //      withHeaders(
   //      HeaderNames.CONTENT_TYPE -> MimeTypes.EVENT_STREAM,

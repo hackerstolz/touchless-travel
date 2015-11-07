@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Server Sent Events Example</title>
+    <script>
+        var params = window.location.search.replace("?", "");
+        user = params.split('=')[1];
+        console.log("User is: " + user);
+    </script>
     <script src="javascripts/events.js"></script>
 </head>
 
 <body>
 Content of the document......
+<div id="events"></div>
 </body>
 
 </html>

@@ -4,7 +4,8 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET     /webapp/api/connect/:user controllers.Events.connect(user: String)
+GET     /webapp/api/connect/:user   controllers.Events.connect(user: String)
+GET     /test/raise-dummy           controllers.Application.testEvent
 
 
 # Map static resources from the /public folder to the /assets URL path

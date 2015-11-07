@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import play.api.Logger
 import play.api.libs.iteratee.Concurrent
 import play.api.libs.iteratee.Concurrent.Channel
-import play.api.libs.json.JsValue
+import play.api.libs.json.{Json, JsValue}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -14,7 +14,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 // Life cycle events
 case class Connect()
+
 case class ActorFor(user: String)
+
+case class Event(data: String)
 
 class WebappUserActorManager extends Actor with ActorLogging {
 
@@ -31,25 +34,26 @@ class WebappUserActorManager extends Actor with ActorLogging {
   def actorFor(user: String): ActorRef = {
     val props = Props(new WebappUserActor(user))
     val connectedUser = context.actorOf(props, name = user)
+    context.system.eventStream.subscribe(connectedUser, classOf[Event])
     Logger.info("Created UserActor for user: " + user)
     connectedUser
   }
 }
 
-class WebappUserActor(user: String) extends Actor with ActorLogging {
+class WebappUserActor(val user: String) extends Actor with ActorLogging {
   var notificationChannel: Option[Channel[JsValue]] = None
 
   def receive = {
     case Connect => connect
-    //    case n: Notification => {
-    //      log.info("called notifiy")
-    //      getChannelOrStop { c =>
-    //        c.push(Json.toJson(n))
-    //        log.info("Delivered message: " + n.id)
-    //      }
-    //    }
-    //    case unknwon => log.info(
-    //      "Received unprocessable message: " + unknwon.getClass.getName)
+    case e: Event => {
+      Logger.info("called notifiy")
+      getChannelOrStop { c =>
+        c.push(Json.toJson(e.data))
+        Logger.info("Delivered message (" + user + "):" + e.data)
+      }
+    }
+    case unknwon => log.info(
+      "Received unprocessable message: " + unknwon.getClass.getName)
   }
 
   def connect = {
