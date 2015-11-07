@@ -16,6 +16,7 @@ GET     /webapp/api/connect/:user   controllers.Events.connect(user: String)
 
 POST    /app/api/enter-region       controllers.AppController.enterRegion
 POST    /app/api/leave-region       controllers.AppController.leaveRegion
+GET     /app/api/ticket-control     controllers.AppController.ticketControl
 GET     /app/api/users/:id/rides    controllers.AppController.rides(id: String)
 
 # Map static resources from the /public folder to the /assets URL path

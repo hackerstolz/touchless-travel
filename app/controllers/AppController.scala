@@ -13,14 +13,17 @@ import services.{TransportationService, LocationService}
   */
 class AppController extends Controller with EventTrigger {
 
-  implicit val geoJsonWrites = Json.writes[Geo]
-  implicit val startStopStampJsonWrites = Json.writes[StartStopStamp]
-  implicit val trainJsonWrites = Json.writes[Train]
-  implicit val userJsonWrites = Json.writes[User]
-  implicit val userRideJsonWrites = Json.writes[UserRide]
+  case class UserRidesResponse(summedPrice: Double, savedPrice: Double, co2saved: Int, rides: Seq[UserRide])
 
 
   //JSON Macro Inception
+  implicit val geoJsonWrites = Json.writes[Geo]
+  implicit val startStopStampJsonWrites = Json.writes[StartStopStamp]
+  implicit val trainJsonWrites = Json.writes[Vehicle]
+  implicit val userJsonWrites = Json.writes[User]
+  implicit val userRideJsonWrites = Json.writes[UserRide]
+  implicit val userRideResponseJsonWrites = Json.writes[UserRidesResponse]
+
   implicit val jsonWrites = Json.writes[EnterLeaveEvent]
   implicit val jsonReads = Json.reads[EnterLeaveEvent]
 
@@ -35,7 +38,7 @@ class AppController extends Controller with EventTrigger {
         EnterLeaveEvents.enterLeaveEvents += event.copy(etype = Some("ENTER"))
         Logger.debug(EnterLeaveEvents.enterLeaveEvents.toString())
 
-        val trainOpt = Trains.getTrainForBeacon(event.beaconId)
+        val trainOpt = Vehicles.getTrainForBeacon(event.beaconId)
         val userOpt = Users.get(event.userId)
         val timestamp = parseIosTimestamp(event.timestamp)
 
@@ -47,12 +50,12 @@ class AppController extends Controller with EventTrigger {
           val stationName = stationOpt.flatMap(s => Some(s.name))
 
           // create new User ride
-          UserRides.startRide(user, train, timestamp, geo, stationName)
+          UserRides.startTrainRide(user, train, timestamp, geo, stationName)
 
           // raise UI event
           val checkinEvent = CheckinEvent(
             account = user.name,
-            transportationType = train.getTransportationType,
+            transportationType = train.vtype,
             transportationName = currentLine,
             locationName = stationName.getOrElse("unknown"),
             lat = geo.lat,
@@ -80,7 +83,7 @@ class AppController extends Controller with EventTrigger {
         Logger.debug(EnterLeaveEvents.enterLeaveEvents.toString())
         EnterLeaveEvents.enterLeaveEvents += event
 
-        val trainOpt = Trains.getTrainForBeacon(event.beaconId)
+        val trainOpt = Vehicles.getTrainForBeacon(event.beaconId)
         val userOpt = Users.get(event.userId)
         val timestamp = parseIosTimestamp(event.timestamp)
 
@@ -94,12 +97,12 @@ class AppController extends Controller with EventTrigger {
           try {
 
             // create new User ride
-            UserRides.stopRide(user, train, timestamp, geo, stationName)
+            UserRides.stopTrainRide(user, train, timestamp, geo, stationName)
 
             // raise UI event
             val checkoutEvent = CheckoutEvent(
               account = user.name,
-              transportationType = train.getTransportationType,
+              transportationType = train.vtype,
               transportationName = currentLine,
               locationName = stationName.getOrElse("unknown"),
               lat = geo.lat,
@@ -120,9 +123,19 @@ class AppController extends Controller with EventTrigger {
   }
 
   def rides(userId: String) = Action {
-
     val userRides = UserRides.getForUser(userId)
-    Ok(Json.toJson(userRides))
+
+    val summedPrice = userRides.map(_.price).sum
+    val savedPrice = summedPrice * 0.1
+    val co2saved = 80
+
+    val response = UserRidesResponse(summedPrice, savedPrice, co2saved, userRides)
+
+    Ok(Json.toJson(response))
+  }
+
+  def ticketControl = Action {
+    Ok("asd")
   }
 
   private def parseIosTimestamp(iosTimestamp: String): DateTime = {

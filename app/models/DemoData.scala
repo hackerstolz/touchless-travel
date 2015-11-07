@@ -1,5 +1,6 @@
 package models
 
+import org.joda.time.DateTime
 import services.LocationService
 
 /**
@@ -11,17 +12,46 @@ object DemoData {
 
   def populate = {
 
-    val train1 = Train("1", "S2")
-
+    // Vehicles
+    val train1 = Train("1", "U9")
     val beacon1 = "63333"
 
-    Trains.add(train1)
-    Trains.addBeacon(beacon1, train1.id)
+    Vehicles.add(train1)
+    Vehicles.addBeacon(beacon1, train1.id)
 
+    val train2 = Train("2", "U2")
+    Vehicles.add(train2)
+    val train3 = Train("3", "U4")
+    Vehicles.add(train3)
+
+    val taxi1 = Taxi("4", "Car No 34")
+    Vehicles.add(train1)
+    val taxi2 = Taxi("5", "Car No 50")
+    Vehicles.add(train2)
+
+
+    //Users
     val user1 = User("1", "Sophie")
-
     Users.add(user1)
 
+    val startR1 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station X"))
+    val stopR1 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station Y"))
+    val ride1 = UserRide(user1, train2, "6 Zones", 3.4, startR1, Some(stopR1))
+    UserRides.add(ride1)
+
+    val startR2 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station X"))
+    val stopR2 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station Y"))
+    val ride2 = UserRide(user1, train3, "3 Zones", 2.8, startR2, Some(stopR2))
+    UserRides.add(ride2)
+
+    val startR3 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station X"))
+    val stopR3 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station Y"))
+    val ride3 = UserRide(user1, taxi1, "15 km", 35, startR3, Some(stopR3))
+    UserRides.add(ride3)
+
+
+
+    // Stations + Geo
     val startStation = Station("reitelsberg", "Reitelsberg", Geo("48.788891", "9.212422"))
     val zielStation = Station("bergfriedhof", "Bergfriedhof", Geo("48.789033", "9.206393"))
     Stations.add(startStation)
