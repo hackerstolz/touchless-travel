@@ -7,6 +7,8 @@ GET     /                           controllers.Application.index
 GET     /webapp/api/connect/:user   controllers.Events.connect(user: String)
 GET     /test/raise-checkin         controllers.Application.testCheckin
 
+POST    /app/api/enter-region       controllers.AppController.enterRegion
+POST    /app/api/leave-region       controllers.AppController.leaveRegion
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /webapp/*file               controllers.Assets.versioned(path="/public", file: Asset)
