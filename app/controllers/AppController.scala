@@ -1,6 +1,7 @@
 package controllers
 
-import models.{UserRides, Geo, StartStopStamp, UserRide}
+import models._
+import play.api.Logger
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc._
 
@@ -14,14 +15,6 @@ class AppController extends Controller with EventTrigger {
   implicit val userRideJsonWrites = Json.writes[UserRide]
 
 
-  /**
-    *   {
-    beaconId: "asdsad"
-    userId: "asdas"
-    timestamp: "234324234"
-  }
-    */
-  case class EnterLeaveEvent(beaconId: String, userId: String, timestamp: String)
   //JSON Macro Inception
   implicit val jsonWrites = Json.writes[EnterLeaveEvent]
   implicit val jsonReads = Json.reads[EnterLeaveEvent]
@@ -34,6 +27,8 @@ class AppController extends Controller with EventTrigger {
         BadRequest(Json.obj("status" ->"KO", "message" -> JsError.toFlatJson(errors)))
       },
       event => {
+        EnterLeaveEvents.enterLeaveEvents += event
+        Logger.debug(EnterLeaveEvents.enterLeaveEvents.toString())
         Ok(Json.obj("status" ->"OK", "message" -> ("Event "+event.toString+" saved.") ))
       }
     )
@@ -47,6 +42,7 @@ class AppController extends Controller with EventTrigger {
         BadRequest(Json.obj("status" ->"KO", "message" -> JsError.toFlatJson(errors)))
       },
       event => {
+        EnterLeaveEvents.enterLeaveEvents += event
         Ok(Json.obj("status" ->"OK", "message" -> ("Event "+event.toString+" saved.") ))
       }
     )
