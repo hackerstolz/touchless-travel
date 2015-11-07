@@ -32,8 +32,8 @@ class AppController extends Controller with EventTrigger {
         BadRequest(Json.obj("status" ->"KO", "message" -> JsError.toFlatJson(errors)))
       },
       event => {
+        EnterLeaveEvents.enterLeaveEvents += event.copy(etype = Some("ENTER"))
         Logger.debug(EnterLeaveEvents.enterLeaveEvents.toString())
-        EnterLeaveEvents.enterLeaveEvents += event
 
         val trainOpt = Trains.getTrainForBeacon(event.beaconId)
         val userOpt = Users.get(event.userId)

@@ -13,7 +13,7 @@ import scala.collection.mutable
     timestamp: "234324234"
   }
   */
-case class EnterLeaveEvent(beaconId: String, userId: String, timestamp: String)
+case class EnterLeaveEvent(beaconId: String, userId: String, timestamp: String, etype: Option[String])
 
 object EnterLeaveEvents {
   val enterLeaveEvents = mutable.Buffer[EnterLeaveEvent]()
