@@ -2,7 +2,6 @@ package controllers
 
 
 import events.{TicketControlEvent, CheckoutEvent, CheckinEvent}
-import models.DemoData
 import play.api.mvc.{Action, Controller}
 
 /**
@@ -54,15 +53,5 @@ class Test extends Controller with EventTrigger {
     Ok(testTicketControl.toJSON)
   }
 
-
-  def populateDemoData = Action {
-     if(DemoData.demoDataPopulated == false) {
-       DemoData.populate
-       DemoData.demoDataPopulated = true
-       Ok("Successfully populated demo data")
-     } else {
-      Ok("Demo data already populated")
-     }
-  }
 
 }
