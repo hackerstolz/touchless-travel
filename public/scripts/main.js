@@ -11,7 +11,10 @@
             window.scrollTo(0, 0);
         }, 1);
 
-        var resetServer = new EventSource('/admin/reset-demo');
+        // refresh server
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", '/admin/reset-demo', false ); // false for synchronous request
+        xmlHttp.send( null );
 
         var user = new Date().getTime() + "AWESOME";
         var source = new EventSource('/webapp/api/connect/' + user);
