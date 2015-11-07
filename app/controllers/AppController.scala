@@ -1,6 +1,5 @@
 package controllers
 
-import actors.Event
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc._
 

@@ -1,6 +1,7 @@
 package actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import events.Event
 import play.api.libs.iteratee.Concurrent
 import play.api.libs.iteratee.Concurrent.Channel
 import play.api.libs.json.{Json, JsValue}
@@ -14,11 +15,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 // Life cycle events
 case class Connect()
 case class ActorFor(user: String)
-
-// Event
-abstract class Event() {
-  def toJSON: JsValue
-}
 
 class WebappUserActorManager extends Actor with ActorLogging {
 

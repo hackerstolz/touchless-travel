@@ -1,6 +1,7 @@
 package controllers
 
-import actors.Event
+import events.Event
+import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc._
 
@@ -13,7 +14,7 @@ case class CheckinEvent(
                          locationName: String,
                          lat: String,
                          lng: String,
-                         timestamp: String
+                         timestamp: DateTime = new DateTime
                        ) extends Event {
 
   implicit val jsonWrites = Json.writes[CheckinEvent]
@@ -30,7 +31,7 @@ case class CheckoutEvent(
                           locationName: String,
                           lat: String,
                           lng: String,
-                          timestamp: String
+                          timestamp: DateTime = new DateTime
                         ) extends Event {
 
   implicit val jsonWrites = Json.writes[CheckoutEvent]
@@ -48,7 +49,7 @@ case class TicketControlEvent(
                           controlType: String,
                           lat: String,
                           lng: String,
-                          timestamp: String
+                          timestamp: DateTime = new DateTime
                         ) extends Event {
 
   implicit val jsonWrites = Json.writes[TicketControlEvent]
@@ -73,8 +74,7 @@ class Application extends Controller with EventTrigger {
       transportationName = "U9 direction Vogelsang",
       locationName = "Reitelsberg",
       lat = "34.87462875",
-      lng = "34.47637882",
-      timestamp = "234567890987")
+      lng = "34.47637882")
 
     raiseEvent(testCheckin)
     Ok
@@ -88,8 +88,7 @@ class Application extends Controller with EventTrigger {
       transportationName = "U9 direction Vogelsang",
       locationName = "Reitelsberg",
       lat = "34.87462875",
-      lng = "34.47637882",
-      timestamp = "234567890987")
+      lng = "34.47637882")
 
     raiseEvent(testCheckout)
     Ok
@@ -104,8 +103,7 @@ class Application extends Controller with EventTrigger {
       locationName = "Reitelsberg",
       controlType = "PASSED",
       lat = "34.87462875",
-      lng = "34.47637882",
-      timestamp = "234567890987")
+      lng = "34.47637882")
 
     raiseEvent(testTicketControl)
     Ok
