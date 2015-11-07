@@ -34,7 +34,7 @@ class Application extends Controller with EventTrigger {
   def testCheckin = Action {
 
     val testCheckin = CheckinEvent(
-    etype = "CHECKOUT",
+    etype = "CHECKIN",
     account = "Norman Weisenburger",
     transportationType = "TRAM",
     transportationName = "U9 direction Vogelsang",
