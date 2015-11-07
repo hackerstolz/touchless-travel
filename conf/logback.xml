@@ -8,6 +8,12 @@
     </encoder>
   </appender>
 
+  <appender name="AKKA" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%date{ISO8601} %-5level %logger{36} %X{akkaSource} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
   <!--
     The logger name is typically the Java/Scala package name.
     This configures the log level to log at for a package and its children packages.
@@ -16,12 +22,12 @@
   <logger name="application" level="DEBUG" />
 
   <!-- Set logging for all Akka library classes to INFO -->
-  <logger name="akka" level="INFO" />
-  <logger name="actors.WebappUserActor" level="INFO" />
-  <logger name="actors.WebappUserActorManager" level="INFO" />
+  <logger name="actors" level="INFO" additivity="false">
+    <appender-ref ref="AKKA" />
+  </logger>
 
-  <root level="ERROR">
-    <appender-ref ref="STDOUT" />
-  </root>
+ <root level="ERROR">
+   <appender-ref ref="STDOUT" />
+ </root>
 
 </configuration>

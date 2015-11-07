@@ -13,10 +13,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 // Life cycle events
 case class Connect()
-
 case class ActorFor(user: String)
 
-case class Event(data: String)
+// Event
+abstract class Event() {
+  def toJSON: JsValue
+}
 
 class WebappUserActorManager extends Actor with ActorLogging {
 
@@ -45,20 +47,20 @@ class WebappUserActor(val user: String) extends Actor with ActorLogging {
   def receive = {
     case Connect => connect
     case e: Event => {
-      log.info("called notifiy")
+      log.info("Received Event")
       getChannelOrStop { c =>
-        c.push(Json.toJson(e.data))
-        log.info("Delivered message (" + user + "):" + e.data)
+        c.push(e.toJSON)
+        log.info("Delivered message:" + e)
       }
     }
     case unknwon => log.info(
-      "Received unprocessable message: " + unknwon.getClass.getName)
+      "Received unknown message: " + unknwon.getClass.getName)
   }
 
   def connect = {
     val enumerator = Concurrent.unicast[JsValue](
       onStart = (c) => {
-        log.info("Connected event source")
+        log.info("EventSource connected")
         notificationChannel = Some(c)
       },
       onComplete = stop,
