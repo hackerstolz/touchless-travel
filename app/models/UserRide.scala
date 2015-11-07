@@ -17,4 +17,12 @@ object UserRides {
 
   var userRides = Seq[UserRide]()
 
+
+  def getForUser(userId: String): Seq[UserRide] = {
+
+
+
+    userRides.filter( r => r.user == userId)
+  }
+
 }

@@ -1,5 +1,6 @@
 package controllers
 
+import models.{UserRides, Geo, StartStopStamp, UserRide}
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc._
 
@@ -7,6 +8,11 @@ import play.api.mvc._
   * Created by michi on 07/11/15.
   */
 class AppController extends Controller with EventTrigger {
+
+  implicit val geoJsonWrites = Json.writes[Geo]
+  implicit val startStopStampJsonWrites = Json.writes[StartStopStamp]
+  implicit val userRideJsonWrites = Json.writes[UserRide]
+
 
   /**
     *   {
@@ -44,6 +50,12 @@ class AppController extends Controller with EventTrigger {
         Ok(Json.obj("status" ->"OK", "message" -> ("Event "+event.toString+" saved.") ))
       }
     )
+  }
+
+  def rides(userId: String) = Action {
+
+    val userRides = UserRides.getForUser(userId)
+    Ok(Json.toJson(userRides))
   }
 
 }
