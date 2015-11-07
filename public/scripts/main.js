@@ -11,6 +11,8 @@
             window.scrollTo(0, 0);
         }, 1);
 
+        var resetServer = new EventSource('/admin/reset-demo');
+
         var user = new Date().getTime() + "AWESOME";
         var source = new EventSource('/webapp/api/connect/' + user);
 
@@ -37,7 +39,7 @@
         aAnimIn, t,
         map, pointarray, heatmap,
         infoWindows = [], oCounter, cnt = 0,
-        u9Marker;
+        u9Marker, animationStarted = false, u9Stations = [];
 
     // Event handling
     function addListeners() {
@@ -153,11 +155,7 @@
           setTimeout(function() { 
             move(u9Marker, latlngs, index + 1, wait, newDestination); 
           }, wait * latlngs[index].speed);
-        } else {
-          // assign new route
-          u9Marker.position = u9Marker.destination;
-          u9Marker.destination = newDestination;
-        }
+        } 
     }
 
     function initContent() {
@@ -180,7 +178,7 @@
             mapOptions);
 
         // Draw U9 Path
-        var u9Stations = [
+        u9Stations = [
             [48.759711, 9.254715, 0],       // Hedelfingen
             [48.766543, 9.249094, 1],       // Hedelfinger Strasse
             [48.771634, 9.245510, 1],       // Wangen Marktplatz
@@ -200,7 +198,7 @@
             [48.788927, 9.213860, 0.8],     // Turn
             [48.788891, 9.212422, 0.2],     // Raitelsberg (index 17)
             [48.789033, 9.206393, 0.8],     // Bergfriedhof
-            [48.789195, 9.202616, 1],       // Karl-Olga-Krankenhaus
+            [48.789195, 9.202616, 0.5],       // Karl-Olga-Krankenhaus
             [48.789393, 9.196007, 1],       // Turn
             [48.789054, 9.195310, 0.2],     // Stöckach
             [48.786092, 9.190149, 1.2],     // Neckartor
@@ -216,9 +214,9 @@
             [48.775099, 9.159143, 0.5],     // Turn
             [48.774943, 9.155560, 0.5],     // Schwab
             [48.774745, 9.151633, 0.5],     // Arndt-/Spittastraße
-            [48.774675, 9.145775, 1],       // Vogelsang
-            [48.774632, 9.144509, 0.2],     // Turn
-            [48.772285, 9.141719, 0.8]      // Herderplatz
+            [48.774675, 9.145775, 1]        // Vogelsang
+            // [48.774632, 9.144509, 0.2],     // Turn
+            // [48.772285, 9.141719, 0.8]      // Herderplatz
         ].map(function(stop){
             return {lat: stop[0], lng: stop[1], distance: stop[2]};
         });
@@ -234,15 +232,21 @@
         u9Marker = new google.maps.Marker({
             map: map,
             draggable: false,
-            icon: 'styles/img/tram_icon.svg',
+            icon: {
+                url: 'styles/img/tram_icon.svg',
+                anchor: new google.maps.Point(30, 30)
+                //scaledSize: new google.maps.Size(40, 40, "px", "px")
+            },
             animation: google.maps.Animation.DROP,
             position: {lat: u9Stations[17].lat, lng: u9Stations[17].lng}
-        });
+        });      
+    }
 
+    function animateFromStation(iFromStationIndex, iToStationIndex) {
         // store a LatLng for each step of the animation
+        iToStationIndex = iToStationIndex || iFromStationIndex + 2;
         frames = [];
-
-        u9Stations.slice(17, u9Stations.length - 1).forEach(function(stop, idx, aStops){
+        u9Stations.slice(iFromStationIndex, iToStationIndex).forEach(function(stop, idx, aStops){
             if (aStops.length > idx + 1) {
                 var dest = aStops[idx + 1];
 
@@ -255,6 +259,8 @@
                 return;
             }  
         });
+
+        move( u9Marker, frames, 0, 30, u9Marker.position );
     }
 
     function closeAllInfoWindows() {
@@ -264,13 +270,36 @@
     }
 
     function raiseEvent(data) {
+
+        data = JSON.parse(data);
+
+        var type = "";
+        var control = "";
+        var date = new Date( data.timestamp * 1000 );
+
+        var formattedTime = moment(date).format('MM Do YYYY, h:mm a');
+        console.log( formattedTime );
+
+        if (data.etype === "CHECKIN") {
+            type = "CHECK IN";
+        } else if (data.etype === "CHECKOUT") {
+            type = "CHECK OUT";
+        } else if (data.etype === "CONTROL") {
+            type = "TICKET CONTROL";
+            if (data.controlType === "PASSED") {
+                control = '<div><b>Ticket control passed</b></div>';
+            } else {
+                control = '<div><b>Ticket control failed</b></div>';
+            }
+        }
         
         u9Marker.info = new google.maps.InfoWindow({
-            content: '<div class="popup-marker"><h2>' + "CHECK IN" + '</h2>' +
-                '<div><b>Date:</b><p>' + "07. Nov 2015 13:24" + '</p></div>' +
-                '<div><b>Vehicle:</b><p>' + "U9 direction Vogelsang" + '</p></div>' +
-                '<div><b>Position:</b><p>' + "Raitelsberg" + '</p></div>' +
-                '<div><b>User:</b><p>' + "Norman Weisenburger" + '</p></div>' +
+            content: '<div class="popup-marker"><h2>' + type + '</h2>' +
+                '<div><b>Date:</b><p>' + formattedTime + '</p></div>' +
+                '<div><b>Vehicle:</b><p>' + data.transportationName + '</p></div>' +
+                '<div><b>Position:</b><p>' + data.locationName + '</p></div>' +
+                '<div><b>User:</b><p>' + data.account + '</p></div>' +
+                control +
                 '</div>'
         });
         infoWindows.push(u9Marker.info);
@@ -279,83 +308,20 @@
 
         window.setTimeout(function(){
             closeAllInfoWindows();
-        },5000);
+        }, 5000);
 
-        if("CHECKIN" === "CHECKIN") {
+        if(data.etype === "CHECKIN" && animationStarted === false) {
             // begin animation, send back to origin after completion
-            move( u9Marker, frames, 0, 50, u9Marker.position );
+            animateFromStation(17);
+            animationStarted = true;
+        } else if (data.etype === "CHECKOUT") {
+            animateFromStation(18, u9Stations.length - 1); 
         }
 
         google.maps.event.addListener(u9Marker, 'click', function() {
             closeAllInfoWindows();
             u9Marker.info.open(map, u9Marker);
         });
-    }
-
-    function addCamMarker(cam, image, animated) {
-        var lat, lng;
-        if (typeof cam.lat == "string" && typeof cam.lng == "string") {
-            // GPS Position are notated as strings and must be transformed
-            // debugger
-            cam.lat = cam.lat.replace(/\s+/g,"");
-            cam.lng = cam.lng.replace(/\s+/g,"");
-            var latParts = cam.lat.split(/[^\d\w]+/);
-            var lngParts = cam.lng.split(/[^\d\w]+/);
-            lat = ConvertDMSToDD(parseInt(latParts[0]), parseInt(latParts[1]), parseInt(latParts[2]), latParts[3]);
-            lng = ConvertDMSToDD(parseInt(lngParts[0]), parseInt(lngParts[1]), parseInt(lngParts[2]), lngParts[3]);
-        } else {
-            lat = cam.lat;
-            lng = cam.lng;
-        }
-
-        animated = animated ? google.maps.Animation.DROP : null;
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(lat, lng),
-            map: map,
-            icon: image,
-            title: cam.owner,
-            draggable: false,
-            animation: animated
-        });
-
-        var audio = (cam.audio == "true") ? "Ja" : "Nein";
-        var realtime = (cam.realtime == "true") ? "Ja" : "Nein";
-        var oR = (cam.objectRecognition == "true") ? "Ja" : "Nein";
-
-        var camImg = "";
-        if (cam.img && cam.img != "") {
-            camImg = "<div class='cam-img' style='background-image: url("+cam.img+")'></div>"
-        }
-
-        var category = '';
-        if (cam.category.indexOf("publicSecurity") > -1) category += "<i class='icon-shield'></i><span>Öffentliche Sicherheit </span>";
-        if (cam.category.indexOf("traffic") > -1) category += "<i class='icon-road'></i><span>Verkehrsüberwachtung </span>";
-        if (cam.category.indexOf("propertySec") > -1) category += "<i class='icon-building'></i><span>Objektschutz </span>";
-        if (cam.category.indexOf("other") > -1) category += "<i class='icon-eye2'></i><span>Sonstiges </span>";
-
-        var address = (cam.adress == "") ? cam.owner : cam.adress;
-        var pub = cam.countPublic == null ? "Keine" : cam.countPublic;
-        debugger
-        marker.info = new google.maps.InfoWindow({
-            content: '<div class="popup-marker"><h2>' + cam.owner + '</h2>' +
-                camImg +
-                '<div><b>Adresse:</b><span>' + address + '</span></div>' +
-                '<div><b>Anzahl Kameras:</b><span>' + cam.count + '</span></div>' +
-                '<div><b>Davon im öff. Raum:</b><span>' + pub + '</span></div>' +
-                '<div><b>Kategorie:</b><span>' + category + '</span></div>' +
-                '<div class="'+audio+'"><i class="icon-audio"></i><b>Audiofähig:</b><span>' + audio + '</span></div>' +
-                '<div class="'+realtime+'"><i class="icon-realtime"></i><b>Echtzeitübertragung:</b><span>' + realtime + '</span></div>' +
-                '<div class="'+oR+'"><i class="icon-target"></i><b>Objekterkennung:</b><span>' + oR + '</span></div>' +
-                '</div>'
-        });
-        infoWindows.push(marker.info);
-        google.maps.event.addListener(marker, 'click', function() {
-            closeAllInfoWindows();
-            marker.info.open(map, marker);
-        });
-
-        cnt += cam.count;
-        oCounter.innerHTML = cnt;
     }
 
     function ConvertDMSToDD(degrees, minutes, seconds, direction) {
