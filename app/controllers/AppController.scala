@@ -1,6 +1,6 @@
 package controllers
 
-import events.{CheckoutEvent, CheckinEvent}
+import events.{TicketControlEvent, CheckoutEvent, CheckinEvent}
 import models._
 import org.joda.time.DateTime
 import play.api.Logger
@@ -32,7 +32,7 @@ class AppController extends Controller with EventTrigger {
 
     placeResult.fold(
       errors => {
-        BadRequest(Json.obj("status" ->"KO", "message" -> JsError.toFlatJson(errors)))
+        BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toFlatJson(errors)))
       },
       event => {
         EnterLeaveEvents.enterLeaveEvents += event.copy(etype = Some("ENTER"))
@@ -42,7 +42,7 @@ class AppController extends Controller with EventTrigger {
         val userOpt = Users.get(event.userId)
         val timestamp = parseIosTimestamp(event.timestamp)
 
-        if (trainOpt.isDefined && userOpt.isDefined ) {
+        if (trainOpt.isDefined && userOpt.isDefined) {
           val train = trainOpt.get
           val user = userOpt.get
           val (geo, stationOpt) = LocationService.getTrainLocation(train.id)
@@ -60,13 +60,13 @@ class AppController extends Controller with EventTrigger {
             locationName = stationName.getOrElse("unknown"),
             lat = geo.lat,
             lng = geo.lng,
-            timestamp = timestamp )
+            timestamp = timestamp)
 
           raiseEvent(checkinEvent)
 
-          Ok(Json.obj("status" ->"OK", "message" -> ("Event "+event.toString+" saved.") ))
+          Ok(Json.obj("status" -> "OK", "message" -> ("Event " + event.toString + " saved.")))
         } else {
-          BadRequest(Json.obj("status" ->"KO", "message" -> "Unable to find user and/or train"))
+          BadRequest(Json.obj("status" -> "KO", "message" -> "Unable to find user and/or train"))
         }
       }
     )
@@ -77,7 +77,7 @@ class AppController extends Controller with EventTrigger {
 
     placeResult.fold(
       errors => {
-        BadRequest(Json.obj("status" ->"KO", "message" -> JsError.toFlatJson(errors)))
+        BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toFlatJson(errors)))
       },
       event => {
         Logger.debug(EnterLeaveEvents.enterLeaveEvents.toString())
@@ -87,7 +87,7 @@ class AppController extends Controller with EventTrigger {
         val userOpt = Users.get(event.userId)
         val timestamp = parseIosTimestamp(event.timestamp)
 
-        if (trainOpt.isDefined && userOpt.isDefined ) {
+        if (trainOpt.isDefined && userOpt.isDefined) {
           val train = trainOpt.get
           val user = userOpt.get
           val (geo, stationOpt) = LocationService.getTrainLocation(train.id)
@@ -107,7 +107,7 @@ class AppController extends Controller with EventTrigger {
               locationName = stationName.getOrElse("unknown"),
               lat = geo.lat,
               lng = geo.lng,
-              timestamp = timestamp )
+              timestamp = timestamp)
 
             raiseEvent(checkoutEvent)
 
@@ -117,13 +117,50 @@ class AppController extends Controller with EventTrigger {
               BadRequest(Json.obj("status" -> "KO", "message" -> msg))
           }
         } else {
-          BadRequest(Json.obj("status" ->"KO", "message" -> "Unable to find user and/or train"))
+          BadRequest(Json.obj("status" -> "KO", "message" -> "Unable to find user and/or train"))
         }
       })
   }
 
+  def ticketControl = Action(parse.anyContent) { request =>
+    val userIdOpt = request.getQueryString("userId")
+    val timestampOpt = request.getQueryString("timestamp")
+    val beaconIdOpt = request.getQueryString("beaconId")
+    if (userIdOpt.isDefined && beaconIdOpt.isDefined) {
+      val userOpt = Users.get(userIdOpt.get)
+      val trainOpt = Vehicles.getTrainForBeacon(beaconIdOpt.get)
+      val timestamp = timestampOpt.flatMap(t => Some(parseIosTimestamp(t))).getOrElse(new DateTime)
+      if (userOpt.isDefined && trainOpt.isDefined) {
+        val train = trainOpt.get
+        val user = userOpt.get
+        val (geo, stationOpt) = LocationService.getTrainLocation(train.id)
+        val currentLine = TransportationService.getCurrentLineForTrain(train.id)
+        val stationName = stationOpt.flatMap(s => Some(s.name))
+
+        // raise UI event
+        val ticketControl = TicketControlEvent(
+          account = user.name,
+          transportationType = train.vtype,
+          transportationName = currentLine,
+          locationName = stationName.getOrElse("unknown"),
+          controlType = "PASSED",
+          lat = geo.lat,
+          lng = geo.lng,
+          timestamp = timestamp)
+
+        raiseEvent(ticketControl)
+
+        Ok(Json.obj("status" -> "OK", "message" -> ("Ticket Control Passed")))
+      } else {
+        BadRequest(Json.obj("status" -> "KO", "message" -> "Unable to find user and/or train"))
+      }
+    } else {
+      BadRequest(Json.obj("status" -> "KO", "message" -> "Unable to parse required params"))
+    }
+  }
+
   def rides(userId: String) = Action {
-    val userRides = UserRides.getForUser(userId)
+    val userRides = UserRides.getForUser(userId).sortBy(_.start.timestamp.getMillis)
 
     val summedPrice = userRides.map(_.price).sum
     val savedPrice = summedPrice * 0.1
@@ -134,9 +171,6 @@ class AppController extends Controller with EventTrigger {
     Ok(Json.toJson(response))
   }
 
-  def ticketControl = Action {
-    Ok("asd")
-  }
 
   private def parseIosTimestamp(iosTimestamp: String): DateTime = {
     val splitArr = iosTimestamp.split("\\.")

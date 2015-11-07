@@ -34,18 +34,18 @@ object DemoData {
     val user1 = User("1", "Sophie")
     Users.add(user1)
 
-    val startR1 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station X"))
-    val stopR1 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station Y"))
+    val startR1 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Rathaus"))
+    val stopR1 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Kursaal"))
     val ride1 = UserRide(user1, train2, "6 Zones", 3.4, startR1, Some(stopR1))
     UserRides.add(ride1)
 
-    val startR2 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station X"))
-    val stopR2 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station Y"))
+    val startR2 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Untertürkheim"))
+    val stopR2 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Berliner Platz"))
     val ride2 = UserRide(user1, train3, "3 Zones", 2.8, startR2, Some(stopR2))
     UserRides.add(ride2)
 
-    val startR3 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station X"))
-    val stopR3 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Station Y"))
+    val startR3 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Mercedesstraße 100, 70372 Stuttgart"))
+    val stopR3 = StartStopStamp(new DateTime, Geo("00.00", "00.00"), Some("Ulmer Straße 23, 73728 Esslingen"))
     val ride3 = UserRide(user1, taxi1, "15 km", 35, startR3, Some(stopR3))
     UserRides.add(ride3)
 
