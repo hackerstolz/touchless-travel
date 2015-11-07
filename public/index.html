@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de-DE" lang="de-DE">
+
+<head>
+    <title>Touchless Travel</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="Author" content="Jascha Quintern" />
+    <meta name="Category" content="application,personal" />
+    <meta name="Description" content="Touchless Travel" />
+    <!-- <link rel="shortcut icon" href="../favicon.ico"> -->
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,300,400italic,400,600italic,600,700italic,700,800italic,800" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="styles/main.css" type="text/css" />
+    <link rel="stylesheet" href="styles/animations.css" type="text/css" />
+    <link rel="stylesheet" href="styles/icomoon/style.css" type="text/css" />
+
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=visualization"></script>
+
+</head>
+
+
+<body>
+
+    <div id="large-header" class="large-header">
+        <ul class="image-wrap fxSoftScale">
+            <li class="current">
+                <img src="styles/img/bgr_1.jpg" alt="Hintergrundbild">
+            </li>
+            <li>
+                <img src="styles/img/bgr_2.jpg" alt="Hintergrundbild">
+            </li>
+            <li>
+                <img src="styles/img/bgr_3.jpg" alt="Hintergrundbild">
+            </li>
+            <li>
+                <img src="styles/img/bgr_4.jpg" alt="Hintergrundbild">
+            </li>
+        </ul>
+        <canvas id="header-canvas"></canvas>
+
+        <div id="header-skipper" class="header-skipper">Go to map
+            <div class="arrow-down"></div>
+        </div>
+        <div class="header-caption">© Stuttgart Hackathon 2015</div>
+    </div>
+
+
+    <div class="app">
+        <img src="styles/img/CameraIconApp.png" class="app-icon" alt="appicon">
+        <p>Auch fürs iPhone: Finde unsere App im Apple App Store.</p>
+        <img src="styles/img/apple-app-store-icon.png" class="app-store" alt="appicon">
+    </div>
+
+    <header class="main-title">
+
+        <div>
+            <span>Touchless</span>
+            <span class="thin">Travel</span>
+        </div>
+
+        <div class="subtitle">
+            <p>Touchless Travel will automatically start if you enter a public transportation vehicle.</p>
+        </div>
+    </header>
+
+    <div id="content">
+
+        <section>
+            <div id="map-canvas"></div>
+        </section>
+
+        <!-- <div class="caption">
+            <h2>Legende:</h2>
+            <ul>
+                <li>
+                    <object data="img/mapcam.svg" type="image/svg+xml" alt="CAM"></object>Watcher (Kamera)</li>
+                <li>
+                    <object data="img/crimeMarker.svg" type="image/svg+xml" alt="CRIME"></object>Polizeimeldung</li>
+            </ul>
+            <p><span>Kameras Gesamt: </span><span class="number">100</span></p>
+        </div> -->
+    </div>
+    <script type="text/javascript" src="scripts/main.js"></script>
+</body>
+
+</html>
