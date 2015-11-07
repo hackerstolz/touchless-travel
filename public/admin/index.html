@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <h1>Touchless Admin Backend</h1>
+      <div class="container">
+      
+      <table id="touchless" class="table table-striped">
+          <tr>
+        <th>No.</th>      
+        <th>Vehicle ID</th>
+        <th>iBeacon Major ID</th>
+        <th>iBeacon Minor ID</th>
+        <th>Position</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>01025</td>
+        <td>63333</td>
+        <td>8949</td>
+        <td>Front Door</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>63333</td>
+        <td>34997</td>
+        <td>Middle Door</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>63333</td>
+        <td>6872</td>
+        <td>Back Door</td>
+      </tr>
+    </table>
+          
+
+<h4>New Entry</h4>
+<table id="addTouchless" class="table table-striped">
+          <tr>
+        <th><input type="no" class="form-control" id="inputNo" placeholder="No."></th>      
+        <th><input type="vecid" class="form-control" id="inputVecid" placeholder="Vehicle ID"></th>
+        <th><input type="beaconmajid" class="form-control" id="inputBeaconmajid" placeholder="iBeacon Major ID"></th>
+        <th><input type="beaconminid" class="form-control" id="inputBeaconminid" placeholder="iBeacon Minor ID"></th>
+        <th><input type="position" class="form-control" id="inputPosition" placeholder="Position"></th>
+      </tr>
+          </table>
+    
+        
+   <div class="text-center">
+    <button type="button" 
+    onclick="add ('5', '01027', '63334', '8923', 'Front Door')"
+class="btn btn-primary"> Add</button>
+          
+        </div>
+        
+<script>
+    
+    function add(no,vecid, beaconmajid, beaconminid, position) {
+    // Find a <table> element with id="myTable":
+        var table = document.getElementById("touchless");
+        
+        var noEle = document.getElementById("inputNo");
+        var no = noEle.value;
+        noEle.value = '';
+        
+        var vecidEle = document.getElementById("inputVecid");
+        var vecid = vecidEle.value;
+        vecidEle.value = '';
+        
+        var beaconmajidEle = document.getElementById("inputBeaconmajid");
+        var beaconmajid = beaconmajidEle.value;
+        beaconmajidEle.value = '';
+        
+        var beaconminidEle = document.getElementById("inputBeaconminid");
+        var beaconminid = beaconminidEle.value;
+        beaconminidEle.value = '';
+        
+        var positionEle = document.getElementById("inputPosition");
+        var position = positionEle.value;
+        positionEle.value = '';
+
+// Create an empty <tr> element and add it to the 1st position of the table:
+        var row = table.insertRow();
+
+// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
+// Add some text to the new cells:
+        cell1.innerHTML = no;
+        cell2.innerHTML = vecid;
+        cell3.innerHTML = beaconmajid;
+        cell4.innerHTML = beaconminid;
+        cell5.innerHTML = position;
+}
+
+</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
