@@ -14,6 +14,14 @@ public transport usage. I.e. the actually used tickets are selected afterwards.
 - ~ 60.000 buses and trains (S-Bahnen) in german public transport.
 - Costs per iBeacon < 1$ when bought on a larger scale.
 
+
+### Target Group
+
+B2C: Everybody who uses public transport
+
+B2B: Local public transport providers, taxi companies, train operators
+
+
 ### Technology 
 
 1. iBeacons and end user smartphone App - Native iOS App, detecting entering and leaving of trains/taxies. The app also displays 
@@ -23,12 +31,6 @@ public transport usage. I.e. the actually used tickets are selected afterwards.
 
 The following figure visualizes the systems architecture:
 ![architecture](/readme_images/architecture.png)
-
-### Target Group
-
-B2C: Everybody who uses public transport
-
-B2B: Local public transport providers, taxi companies, train operators
 
 
 ### Show me something!
