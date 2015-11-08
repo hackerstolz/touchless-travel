@@ -51,6 +51,22 @@
         skipper.addEventListener('click', function() {
             toggle(1);
         });
+        document.querySelector("header").addEventListener('click', function() {
+            toggle();
+        });
+        document.getElementById("architecture-icon").addEventListener('click', function() {
+            //
+        });
+        document.getElementById("future-icon").addEventListener('click', function() {
+            var text = document.querySelector(".main-title .thin");
+            text.innerHTML = "Everything";
+            text.className += "text-glow";
+            [].forEach.call(document.querySelectorAll(".image-wrap li img"), function(img, idx){
+                img.src = "styles/img/bgr_" + (idx + 5) + "B.jpg";
+            });
+
+            var divs = document.querySelectorAll('div');
+        });
         if (!language) return;
         for (var i = 0; i < language.children.length; i++) {
             language.children[i].addEventListener('click', function(e) {
@@ -113,7 +129,7 @@
     //     socket.on('newCamera', function(data){
     //         console.log(data);
 
-    //         var image = 'img/mapcamNew.svg';
+    //         var image = 'img/....svg';
     //         addCamMarker(data, image, true);
     //     });
     // }

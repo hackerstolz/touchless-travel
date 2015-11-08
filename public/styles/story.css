@@ -32,15 +32,16 @@ body {
   color: #ffffff; 
   z-index: 10; 
   font-weight: 600;
-  width: 100vw; 
+  width: 100vw;
   position: fixed; 
   text-align: center; 
   margin: 0 auto; 
   font-size: 3vw; 
   top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  left: 50%;
+  -webkit-transform: translateY(-50%) translateX(-50%);
+  -ms-transform: translateY(-50%) translateX(-50%);
+  transform: translateY(-50%) translateX(-50%);
 }
 
 #story-title-one {
@@ -72,5 +73,126 @@ body {
   height: 10vw;
   border-radius: 10vw;
   z-index: 5;
-  width: 5vw;
+  border: 1vw solid rgba(0,0,0,0.5);
+}
+
+.big-symbol-logo {
+  position: fixed; 
+  display: block;
+  background-color: rgba(255,255,255,0.5);
+  width: 25vw !important;
+  height: 25vw;
+  border-radius: 12.5vw;
+  z-index: 5;
+}
+
+#story-bluetooth {
+  height: 500px;
+  width: 500px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.user {
+    stroke: #ffffff;
+    height: 30px;
+    stroke-width: 15px;
+    position: absolute;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#user-1 {
+    top: 40%;
+    left: 40%;
+}
+
+#user-2 {
+    top: 45%;
+    left: 25%;
+}
+
+#user-3 {
+    top: 50%;
+    left: 35%;
+}
+
+#user-4 {
+    top: 60%;
+    left: 30%;
+}
+
+#user-5 {
+    top: 35%;
+    left: 30%;
+}
+
+#user-6 {
+    top: 60%;
+    left: 40%;
+}
+
+#user-7 {
+    top: 40%;
+    left: 60%;
+}
+
+#user-8 {
+    top: 45%;
+    left: 75%;
+}
+
+#user-9 {
+    top: 50%;
+    left: 65%;
+}
+
+#user-10 {
+    top: 60%;
+    left: 70%;
+}
+
+#user-11 {
+    top: 35%;
+    left: 70%;
+}
+
+#user-12 {
+    top: 60%;
+    left: 60%;
+}
+
+#story-title-eleven b {
+  font-weight: 800;
+  font-size: 5vw; 
+}
+
+#story-title-eleven small {
+  font-weight: 200;
+  font-size: 5vw; 
+}
+
+#story-title-eleven-sub {
+  font-family: 'Walter Turncoat', cursive;
+  font-weight: 400;
+  font-size: 3vw; 
+  font-style: italic;
+  top: 80%;
+}
+
+#story-app-icon {
+  display: block;
+  position: fixed; 
+  height: 15vw; 
+  top: 20%; 
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  border-radius: 3vw;
 }

@@ -52,13 +52,54 @@ header {position: absolute; width: 100%; top: 50%; text-align: center; transform
 header {text-shadow: 0px 0px 5px rgba(0,0,0,1);}
 header span {color: rgba(255,255,255,1); font-weight: 600; font-size: 4rem; text-transform: uppercase; letter-spacing: 0.1rem; }
 header span.thin {font-weight: 200; font-size: 4rem; white-space: nowrap;}
-body.revealed header {text-align: left; padding-left: 15px;}
+body.revealed header {text-align: left; padding-left: 15px; cursor: pointer;}
 @media (min-width: 600px) { 
   body.revealed header {text-align: center;}
 }
 
-header .subtitle {color: white; font-size: 4rem; width: 600px; margin: 0 auto; padding-top: 15%;}
+header .subtitle {color: white; font-size: 5rem; width: 600px; margin: 0 auto; padding-top: 5%;}
 body.revealed header .subtitle {display: none;}
+
+#architecture-icon, #future-icon {
+  position: fixed;
+  display: block;
+  top: 1vw;
+  left: 1vw;
+  width: 10vw;
+  height: 10vw;
+  background-color: rgba(255,255,255,0.5);
+  transition: background-color 0.3s, border-width 0.3s, transform 0.3s, -webkit-transform 0.3s;
+  border-radius: 6vw;
+  z-index: 9999;
+  cursor: pointer;
+}
+#architecture-icon img, #future-icon img {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  max-width: 8vw;
+  max-height: 8vw;
+  transform: translateY(-50%) translateX(-50%);
+}
+#future-icon {
+  left: 15vw;
+}
+
+.text-glow {
+  text-shadow:0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #49ff18, 0 0 30px #49ff18, 0 0 40px #49ff18, 0 0 55px #49ff18, 0 0 75px #49ff18;
+}
+
+body.revealed #architecture-icon, body.revealed #future-icon {
+  display: none;
+}
+
+#architecture-icon:hover, #future-icon:hover {
+  background-color: rgba(255,255,255,0.9);
+  border-top: 0.5vw solid rgba(0,0,0,0.5);
+  /*transform: translateY(-0.5vw);*/
+}
+
 
 .caption {position: fixed; top: 50%; left: 0; background-color: rgba(255,255,255,.95); padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.5);}
 .caption h2 {margin: 5px; text-align: left;}
