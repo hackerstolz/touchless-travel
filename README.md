@@ -3,8 +3,9 @@ Stuttgart Hackathon 2015 Project - Team Hackerstolz and Friends
 
 ### Elevator Pitch
 Create a real pay-as-you go solution: No more tickets, no more terminals, no more queues.
-Touchless Travel is the world's first approach that leverages iBeacon technology to track public transport rides. Your phone recognizes the vehicle when you enter and leave, thus being able to infere the distance traveled.
-At the end of the month users receive a summed bill that is automatically optimized based on the 
+Touchless Travel is the world's first approach that leverages iBeacon technology to track public transport rides. 
+With the help of iBeacons your phone recognizes the vehicle when you enter and leave, thus being able to infere the distance traveled.
+At the end of the month you receive a summed bill that is automatically optimized based on the 
 public transport usage. I.e. the actually used tickets are selected afterwards.
 
 ### Facts
