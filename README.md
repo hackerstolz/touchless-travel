@@ -16,3 +16,21 @@ public transport usage. I.e. the actually used tickets are selected afterwards.
 
 The following figure visualizes the systems architecture:
 ![architecture](/readme_images/architecture.png)
+
+### Target Group
+
+B2C: Everybody who uses public transport
+B2B: Local public transport providers, taxi companies, train operators
+
+
+### Show me something!
+
+[Intro](https://touchless-travel.herokuapp.com/webapp/intro.html)
+[Live Demo](https://touchless-travel.herokuapp.com/webapp/index.html)
+
+
+### Related Git Repositories
+
+[iOS APP](https://github.com/settl/TouchlessTravelApp)
+
+
