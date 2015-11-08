@@ -7,6 +7,12 @@ Touchless Travei is the worlds first approach that leverages iBeacon technology 
 At the end of the month users receive a summed bill that is automatically optimized based on the 
 public transport usage. I.e. the actually used tickets are selected afterwards.
 
+### Facts
+
+- ~ 10 billion (10^9) passengers per year use public transport (ÖPNV) in Germany.
+- ~ 60.000 buses and trains (S-Bahnen) in german public transport.
+- Costs per iBeacon < 1$ when bought on a larger scale.
+
 ### Technology 
 
 1. iBeacons and end user smartphone App - Native iOS App, detecting entering and leaving of trains/taxies. The app also displays 
@@ -35,4 +41,14 @@ B2B: Local public transport providers, taxi companies, train operators
 
 [iOS APP](https://github.com/settl/TouchlessTravelApp)
 
+
+### Team
+
+- Theresa Best
+- Michael Dell
+- Jascha Quintern
+- Sophie Ettl
+- Daniel Zaske
+- Philip Zaske
+- Norman Weisenburger
 
