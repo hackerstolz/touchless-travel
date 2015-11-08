@@ -37,7 +37,7 @@ The following figure visualizes the systems architecture:
 
 [Intro](https://touchless-travel.herokuapp.com/webapp/intro.html)
 
-[Live Demo](https://touchless-travel.herokuapp.com/webapp/index.html)
+Live demo temporarily disabled for final hackathon pitches
 
 ![screenshot](/public/screenshot.png)
 
