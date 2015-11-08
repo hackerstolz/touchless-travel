@@ -54,13 +54,20 @@
         document.querySelector("header").addEventListener('click', function() {
             toggle();
         });
+        var architectureOverview = document.getElementById("architecture-overview");
         document.getElementById("architecture-icon").addEventListener('click', function() {
-            //
+            architectureOverview.className = "flip-init fxFlipInX";
         });
+
+        // add event to close button
+        document.getElementById("architecture-overview-close-btn").addEventListener('click', function() {
+            architectureOverview.className = "flip-init fxFlipOutX";
+        });
+
         document.getElementById("future-icon").addEventListener('click', function() {
-            var text = document.querySelector(".main-title .thin");
+            var text = document.getElementById("title-second-part");
             text.innerHTML = "Everything";
-            text.className += "text-glow";
+            text.className += " text-glow";
             [].forEach.call(document.querySelectorAll(".image-wrap li img"), function(img, idx){
                 img.src = "styles/img/bgr_" + (idx + 5) + "B.jpg";
             });

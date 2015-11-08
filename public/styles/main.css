@@ -86,8 +86,60 @@ body.revealed header .subtitle {display: none;}
   left: 15vw;
 }
 
+#title-second-part {
+  transition: text-shadow 1.5s;
+}
+
+#architecture-overview {
+  position: fixed;
+  background-color: #fff;
+  z-index: 99999;
+  padding: 5vw;
+  top: 5vw;
+  left: 5vw;
+  width: 80vw;
+  height: 80vh;
+  box-shadow: 0px 0px 40px #000;
+}
+
+#architecture-overview img {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  max-width: 80vw;
+  max-height: 80vh;
+  transform: translateY(-50%) translateX(-50%);
+}
+
+#architecture-overview-close-btn {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 5vw;
+  right: 5vw;
+  cursor: pointer;
+}
+
+.close-btn-a {
+  position: absolute;
+  border-right: 1px solid black;
+  height: 50px;
+  transform: rotate(45deg);
+  left: 50%;
+}
+
+.close-btn-b {
+  position: absolute;
+  border-right: 1px solid black;
+  height: 50px;
+  transform: rotate(-45deg);
+  left: 50%;
+}
+
 .text-glow {
-  text-shadow:0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #49ff18, 0 0 30px #49ff18, 0 0 40px #49ff18, 0 0 55px #49ff18, 0 0 75px #49ff18;
+  transition: text-shadow 1.5s;
+  text-shadow:0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #1abeff, 0 0 30px #1abeff, 0 0 40px #1abeff, 0 0 55px #1abeff, 0 0 75px #1abeff;
 }
 
 body.revealed #architecture-icon, body.revealed #future-icon {
